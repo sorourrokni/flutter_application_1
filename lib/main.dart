@@ -12,9 +12,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    Color surfaceColor = const Color(0x0dffffff);
     return MaterialApp(
       title: 'Profile Page',
       theme: ThemeData(
+        dividerColor: surfaceColor,
         primaryColor: Colors.pink.shade400,
         scaffoldBackgroundColor: const Color.fromARGB(255, 30, 30, 30),
         appBarTheme: const AppBarTheme(backgroundColor: Colors.black),
@@ -34,7 +36,23 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+enum _SkillType { photoshop, illustrator, xd, afterEffect, lightRoom }
+
+class _MyHomePageState extends State<MyHomePage> {
+  _SkillType _skill = _SkillType.photoshop;
+  void updateSelectedSkill(_SkillType type) {
+    setState(() {
+      _skill = type;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,23 +130,144 @@ class MyHomePage extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyLarge),
             ),
             const Divider(),
-            Row(
-              children: [
-                Text(
-                  'Skills',
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      fontWeight: FontWeight.w900, color: Colors.white),
-                ),
-                const SizedBox(
-                  width: 2,
-                ),
-                const Icon(
-                  CupertinoIcons.chevron_down,
-                  size: 12,
-                )
-              ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(32, 16, 32, 12),
+              child: Row(
+                children: [
+                  Text(
+                    'Skills',
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        fontWeight: FontWeight.w900, color: Colors.white),
+                  ),
+                  const SizedBox(
+                    width: 2,
+                  ),
+                  const Icon(
+                    CupertinoIcons.chevron_down,
+                    size: 12,
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Center(
+              child: Wrap(
+                direction: Axis.horizontal,
+                children: [
+                  Skill(
+                    title: 'Photoshop',
+                    type: _SkillType.photoshop,
+                    imagePath: 'assets/images/app_icon_01.png',
+                    shadowColor: Colors.blue,
+                    isSelected: _skill == _SkillType.photoshop,
+                    onTap: () {
+                      updateSelectedSkill(_SkillType.photoshop);
+                    },
+                  ),
+                  Skill(
+                    title: 'Adobe XD',
+                    type: _SkillType.xd,
+                    imagePath: 'assets/images/app_icon_05.png',
+                    shadowColor: Colors.pink,
+                    isSelected: _skill == _SkillType.xd,
+                    onTap: () {
+                      updateSelectedSkill(_SkillType.xd);
+                    },
+                  ),
+                  Skill(
+                    title: 'Illustrator',
+                    type: _SkillType.illustrator,
+                    imagePath: 'assets/images/app_icon_04.png',
+                    shadowColor: Colors.orange.shade100,
+                    isSelected: _skill == _SkillType.illustrator,
+                    onTap: () {
+                      updateSelectedSkill(_SkillType.illustrator);
+                    },
+                  ),
+                  Skill(
+                    title: 'After Effect',
+                    type: _SkillType.afterEffect,
+                    imagePath: 'assets/images/app_icon_03.png',
+                    shadowColor: Colors.blue.shade800,
+                    isSelected: _skill == _SkillType.afterEffect,
+                    onTap: () {
+                      updateSelectedSkill(_SkillType.afterEffect);
+                    },
+                  ),
+                  Skill(
+                    title: 'Lightroom',
+                    type: _SkillType.lightRoom,
+                    imagePath: 'assets/images/app_icon_02.png',
+                    shadowColor: Colors.blue,
+                    isSelected: _skill == _SkillType.lightRoom,
+                    onTap: () {
+                      updateSelectedSkill(_SkillType.lightRoom);
+                    },
+                  )
+                ],
+              ),
             )
           ],
         ));
+  }
+}
+
+class Skill extends StatelessWidget {
+  final String title;
+  final _SkillType type;
+  final String imagePath;
+  final Color shadowColor;
+  final bool isSelected;
+  final Function() onTap;
+
+  const Skill({
+    super.key,
+    required this.title,
+    required this.imagePath,
+    required this.shadowColor,
+    required this.isSelected,
+    required this.type,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final BorderRadius defaultBorderRadius = BorderRadius.circular(12);
+    return InkWell(
+      borderRadius: defaultBorderRadius,
+      onTap: onTap,
+      child: Container(
+        width: 110,
+        height: 110,
+        decoration: isSelected
+            ? BoxDecoration(
+                borderRadius: defaultBorderRadius,
+                color: Theme.of(context).dividerColor)
+            : null,
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Container(
+            decoration: isSelected
+                ? BoxDecoration(boxShadow: [
+                    BoxShadow(
+                      color: shadowColor.withOpacity(0.5),
+                      blurRadius: 20,
+                    )
+                  ])
+                : null,
+            child: Image.asset(
+              imagePath,
+              width: 40,
+              height: 40,
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Text(title),
+        ]),
+      ),
+    );
   }
 }
