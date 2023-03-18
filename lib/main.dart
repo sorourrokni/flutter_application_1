@@ -33,9 +33,20 @@ class MyHomePage extends StatelessWidget{
 @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text('Hello world'),
-      ),
+      appBar:AppBar(
+        title:Text('Curriculum Vitae'),
+        actions: [
+          Icon(Icons.chat_bubble_outline_rounded),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 0, 16, 0),
+            child: Icon(Icons.more_vert_rounded),
+          ),
+        ]),
+      body:Column(children: [
+        Row(children: [
+         
+        ],)
+      ],)
     );
   }
 }
