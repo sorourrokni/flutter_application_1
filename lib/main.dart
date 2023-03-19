@@ -13,11 +13,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color surfaceColor = const Color(0x0dffffff);
+    Color primaryColor = Colors.pink.shade400;
     return MaterialApp(
       title: 'Profile Page',
       theme: ThemeData(
+        elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(primaryColor))),
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide.none),
+          fillColor: surfaceColor,
+          filled: true,
+        ),
         dividerColor: surfaceColor,
-        primaryColor: Colors.pink.shade400,
+        primaryColor: primaryColor,
         scaffoldBackgroundColor: const Color.fromARGB(255, 30, 30, 30),
         appBarTheme: const AppBarTheme(backgroundColor: Colors.black),
         brightness: Brightness.dark,
@@ -31,7 +42,7 @@ class MyApp extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: Color.fromARGB(255, 255, 255, 255)))),
       ),
-      home: MyHomePage(),
+      home: const MyHomePage(),
     );
   }
 }
@@ -63,153 +74,203 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Icon(Icons.more_vert_rounded),
           ),
         ]),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(32),
-              child: Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      'assets/images/profile_image.png',
-                      width: 60,
-                      height: 60,
+        body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(32),
+                child: Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset(
+                        'assets/images/profile_image.png',
+                        width: 60,
+                        height: 60,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Brice Séraphin',
-                            style: Theme.of(context).textTheme.displayLarge),
-                        const SizedBox(
-                          height: 2,
-                        ),
-                        Text(
-                          'Product & Print Designer',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.location_on_outlined,
-                              size: 16,
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
-                            const SizedBox(
-                              width: 3,
-                            ),
-                            Text(
-                              'Paris, France',
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          ],
-                        )
-                      ],
+                    const SizedBox(
+                      width: 16,
                     ),
-                  ),
-                  Icon(
-                    CupertinoIcons.heart,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Brice Séraphin',
+                              style: Theme.of(context).textTheme.displayLarge),
+                          const SizedBox(
+                            height: 2,
+                          ),
+                          Text(
+                            'Product & Print Designer',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.location_on_outlined,
+                                size: 16,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .color,
+                              ),
+                              const SizedBox(
+                                width: 3,
+                              ),
+                              Text(
+                                'Paris, France',
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    Icon(
+                      CupertinoIcons.heart,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(32, 0, 32, 16),
-              child: Text(
-                  'Enthusiastic young computer Geek, Freelance Designer in love of independence, I have alot of experience in graphical projects, and always give the best of myself to bring you to success.',
-                  style: Theme.of(context).textTheme.bodyLarge),
-            ),
-            const Divider(),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(32, 16, 32, 12),
-              child: Row(
-                children: [
-                  Text(
-                    'Skills',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        fontWeight: FontWeight.w900, color: Colors.white),
-                  ),
-                  const SizedBox(
-                    width: 2,
-                  ),
-                  const Icon(
-                    CupertinoIcons.chevron_down,
-                    size: 12,
-                  )
-                ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(32, 0, 32, 16),
+                child: Text(
+                    'Enthusiastic young computer Geek, Freelance Designer in love of independence, I have alot of experience in graphical projects, and always give the best of myself to bring you to success.',
+                    style: Theme.of(context).textTheme.bodyLarge),
               ),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            Center(
-              child: Wrap(
-                direction: Axis.horizontal,
-                children: [
-                  Skill(
-                    title: 'Photoshop',
-                    type: _SkillType.photoshop,
-                    imagePath: 'assets/images/app_icon_01.png',
-                    shadowColor: Colors.blue,
-                    isSelected: _skill == _SkillType.photoshop,
-                    onTap: () {
-                      updateSelectedSkill(_SkillType.photoshop);
-                    },
-                  ),
-                  Skill(
-                    title: 'Adobe XD',
-                    type: _SkillType.xd,
-                    imagePath: 'assets/images/app_icon_05.png',
-                    shadowColor: Colors.pink,
-                    isSelected: _skill == _SkillType.xd,
-                    onTap: () {
-                      updateSelectedSkill(_SkillType.xd);
-                    },
-                  ),
-                  Skill(
-                    title: 'Illustrator',
-                    type: _SkillType.illustrator,
-                    imagePath: 'assets/images/app_icon_04.png',
-                    shadowColor: Colors.orange.shade100,
-                    isSelected: _skill == _SkillType.illustrator,
-                    onTap: () {
-                      updateSelectedSkill(_SkillType.illustrator);
-                    },
-                  ),
-                  Skill(
-                    title: 'After Effect',
-                    type: _SkillType.afterEffect,
-                    imagePath: 'assets/images/app_icon_03.png',
-                    shadowColor: Colors.blue.shade800,
-                    isSelected: _skill == _SkillType.afterEffect,
-                    onTap: () {
-                      updateSelectedSkill(_SkillType.afterEffect);
-                    },
-                  ),
-                  Skill(
-                    title: 'Lightroom',
-                    type: _SkillType.lightRoom,
-                    imagePath: 'assets/images/app_icon_02.png',
-                    shadowColor: Colors.blue,
-                    isSelected: _skill == _SkillType.lightRoom,
-                    onTap: () {
-                      updateSelectedSkill(_SkillType.lightRoom);
-                    },
-                  )
-                ],
+              const Divider(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(32, 16, 32, 12),
+                child: Row(
+                  children: [
+                    Text(
+                      'Skills',
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          fontWeight: FontWeight.w900, color: Colors.white),
+                    ),
+                    const SizedBox(
+                      width: 2,
+                    ),
+                    const Icon(
+                      CupertinoIcons.chevron_down,
+                      size: 12,
+                    )
+                  ],
+                ),
               ),
-            )
-          ],
+              const SizedBox(
+                height: 12,
+              ),
+              Center(
+                child: Wrap(
+                  direction: Axis.horizontal,
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    Skill(
+                      title: 'Photoshop',
+                      type: _SkillType.photoshop,
+                      imagePath: 'assets/images/app_icon_01.png',
+                      shadowColor: Colors.blue,
+                      isSelected: _skill == _SkillType.photoshop,
+                      onTap: () {
+                        updateSelectedSkill(_SkillType.photoshop);
+                      },
+                    ),
+                    Skill(
+                      title: 'Adobe XD',
+                      type: _SkillType.xd,
+                      imagePath: 'assets/images/app_icon_05.png',
+                      shadowColor: Colors.pink,
+                      isSelected: _skill == _SkillType.xd,
+                      onTap: () {
+                        updateSelectedSkill(_SkillType.xd);
+                      },
+                    ),
+                    Skill(
+                      title: 'Illustrator',
+                      type: _SkillType.illustrator,
+                      imagePath: 'assets/images/app_icon_04.png',
+                      shadowColor: Colors.orange.shade100,
+                      isSelected: _skill == _SkillType.illustrator,
+                      onTap: () {
+                        updateSelectedSkill(_SkillType.illustrator);
+                      },
+                    ),
+                    Skill(
+                      title: 'After Effect',
+                      type: _SkillType.afterEffect,
+                      imagePath: 'assets/images/app_icon_03.png',
+                      shadowColor: Colors.blue.shade800,
+                      isSelected: _skill == _SkillType.afterEffect,
+                      onTap: () {
+                        updateSelectedSkill(_SkillType.afterEffect);
+                      },
+                    ),
+                    Skill(
+                      title: 'Lightroom',
+                      type: _SkillType.lightRoom,
+                      imagePath: 'assets/images/app_icon_02.png',
+                      shadowColor: Colors.blue,
+                      isSelected: _skill == _SkillType.lightRoom,
+                      onTap: () {
+                        updateSelectedSkill(_SkillType.lightRoom);
+                      },
+                    )
+                  ],
+                ),
+              ),
+              const Divider(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(32, 12, 32, 12),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Personal Information',
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          fontWeight: FontWeight.w900, color: Colors.white),
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    const TextField(
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        prefixIcon: Icon(CupertinoIcons.at),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    const TextField(
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        prefixIcon: Icon(CupertinoIcons.lock),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        child: const Text('Save'),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ));
   }
 }
