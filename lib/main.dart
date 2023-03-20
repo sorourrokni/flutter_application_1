@@ -6,49 +6,42 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+  ThemeMode themeMode = ThemeMode.dark;
+
   @override
   Widget build(BuildContext context) {
-    Color surfaceColor = const Color(0x0dffffff);
-    Color primaryColor = Colors.pink.shade400;
     return MaterialApp(
       title: 'Profile Page',
-      theme: ThemeData(
-        elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(primaryColor))),
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide.none),
-          fillColor: surfaceColor,
-          filled: true,
-        ),
-        dividerColor: surfaceColor,
-        primaryColor: primaryColor,
-        scaffoldBackgroundColor: const Color.fromARGB(255, 30, 30, 30),
-        appBarTheme: const AppBarTheme(backgroundColor: Colors.black),
-        brightness: Brightness.dark,
-        textTheme: GoogleFonts.latoTextTheme(const TextTheme(
-            bodyMedium: TextStyle(fontSize: 15),
-            bodyLarge: TextStyle(
-                fontSize: 13, color: Color.fromARGB(200, 255, 255, 255)),
-            headlineLarge: TextStyle(fontWeight: FontWeight.bold),
-            displayLarge: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 255, 255, 255)))),
+      theme: themeMode == ThemeMode.dark
+          ? MyAppThemeConfig.dark().getTheme()
+          : MyAppThemeConfig.light().getTheme(),
+      home: MyHomePage(
+        toggleThemeMode: () {
+          setState(() {
+            if (themeMode == ThemeMode.dark) {
+              themeMode = ThemeMode.light;
+            } else {
+              themeMode = ThemeMode.dark;
+            }
+          });
+        },
       ),
-      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  const MyHomePage({super.key, required this.toggleThemeMode});
+  final Function() toggleThemeMode;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -67,11 +60,14 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Curriculum Vitae'), actions: const [
-          Icon(Icons.chat_bubble_outline_rounded),
-          Padding(
-            padding: EdgeInsets.fromLTRB(8, 0, 16, 0),
-            child: Icon(Icons.more_vert_rounded),
+        appBar: AppBar(title: const Text('Curriculum Vitae'), actions: [
+          const Icon(Icons.chat_bubble_outline_rounded),
+          InkWell(
+            onTap: widget.toggleThemeMode,
+            child: const Padding(
+              padding: EdgeInsets.fromLTRB(8, 0, 16, 0),
+              child: Icon(Icons.more_vert_rounded),
+            ),
           ),
         ]),
         body: SingleChildScrollView(
@@ -329,6 +325,65 @@ class Skill extends StatelessWidget {
           Text(title),
         ]),
       ),
+    );
+  }
+}
+
+class MyAppThemeConfig {
+  final Color primaryColor = Colors.pink.shade400;
+  final Color primaryTextColor;
+  final Color surfaceColor;
+  final Color secondrayTextColor;
+  final Color appBarColor;
+  final Color backgroundColor;
+  final Brightness brightness;
+
+  MyAppThemeConfig.dark()
+      : primaryTextColor = Colors.white,
+        secondrayTextColor = Colors.white70,
+        appBarColor = Colors.black,
+        surfaceColor = const Color(0x0dffffff),
+        brightness = Brightness.dark,
+        backgroundColor = const Color.fromARGB(255, 30, 30, 30);
+
+  MyAppThemeConfig.light()
+      : primaryTextColor = Colors.grey.shade900,
+        secondrayTextColor = Colors.grey.shade900.withOpacity(0.8),
+        appBarColor = const Color.fromARGB(255, 235, 235, 235),
+        surfaceColor = const Color(0x0d000000),
+        brightness = Brightness.light,
+        backgroundColor = Colors.white;
+
+  ThemeData getTheme() {
+    return ThemeData(
+      dividerColor: surfaceColor,
+      primaryColor: primaryColor,
+      scaffoldBackgroundColor: backgroundColor,
+      brightness: brightness,
+      elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(primaryColor))),
+      inputDecorationTheme: InputDecorationTheme(
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide.none),
+        fillColor: surfaceColor,
+        filled: true,
+      ),
+      appBarTheme: AppBarTheme(
+          backgroundColor: appBarColor, foregroundColor: primaryTextColor),
+      textTheme: GoogleFonts.latoTextTheme(TextTheme(
+          bodyMedium: TextStyle(fontSize: 15, color: primaryTextColor),
+          bodyLarge: TextStyle(
+            fontSize: 13,
+            color: primaryTextColor,
+          ),
+          headlineLarge:
+              TextStyle(fontWeight: FontWeight.bold, color: secondrayTextColor),
+          displayLarge: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: secondrayTextColor))),
     );
   }
 }
